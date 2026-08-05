@@ -1,0 +1,344 @@
+% tumthesis.sty
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{tumthesis}[2026/08/05 TUM Thesis Template]
+
+% ---------------------------------------------------------------------------
+% Dependencies
+% ---------------------------------------------------------------------------
+
+% Typography, layout, and graphics
+\RequirePackage[T1]{fontenc}
+\RequirePackage{mlmodern}
+\RequirePackage[a4paper,top=3.5cm,bottom=3.5cm,left=3cm,right=3cm]{geometry}
+\RequirePackage{titling}
+\RequirePackage{graphicx}
+\RequirePackage{svg}
+\RequirePackage{enumitem}
+
+% Mathematics
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{mathtools}
+\RequirePackage{mathrsfs}
+\RequirePackage{mathabx}
+\RequirePackage{dsfont}
+\RequirePackage[scr=boondox]{mathalpha}
+\RequirePackage{tikz-cd}
+\RequirePackage{shuffle}
+\RequirePackage{textgreek}
+
+% Document structure
+\RequirePackage{amsthm}
+\RequirePackage{titlesec}
+\RequirePackage{fancyhdr}
+\RequirePackage{tocloft}
+
+% Bibliography, links, and glossaries
+\RequirePackage{etoolbox}
+\RequirePackage[hyphens]{url}
+\RequirePackage{xurl}
+\RequirePackage[hidelinks]{hyperref}
+\RequirePackage[backend=biber,style=alphabetic,maxbibnames=99]{biblatex}
+\RequirePackage{glossaries}
+
+% ---------------------------------------------------------------------------
+% Typography and numbering
+% ---------------------------------------------------------------------------
+
+\newcommand{\thesisfontsize}{11}
+\newcommand{\thesisbaselineskip}{13}
+\AtBeginDocument{\fontsize{\thesisfontsize}{\thesisbaselineskip}\selectfont}
+\renewcommand{\bfdefault}{b}
+\numberwithin{equation}{chapter}
+
+% ---------------------------------------------------------------------------
+% Thesis metadata and front-matter content
+% ---------------------------------------------------------------------------
+
+\newcommand{\institutionlogo}{tum_bw_logo.pdf}
+\newcommand{\bottomlogo}{tum_ma_logo.pdf}
+\newcommand{\authorsignature}{signature_hw_bw.png}
+
+% Research Group
+\newcommand{\researchgroup}{Research Group}
+
+% Department
+\newcommand{\departmentprefix}{Department of}
+\newcommand{\department}{X}
+
+% School
+\newcommand{\school}{}
+\newcommand{\schoolprefix}{School of}
+
+\newcommand{\university}{Technical University of Munich}
+\newcommand{\tumthesiscurrentlanguage}{en}
+
+\newcommand{\thesislanguage}[1]{%
+  \renewcommand{\tumthesiscurrentlanguage}{#1}%
+  \ifdefstring{\tumthesiscurrentlanguage}{en}{%
+    \renewcommand{\university}{Technical University of Munich}%
+  }{%
+    \ifdefstring{\tumthesiscurrentlanguage}{de}{%
+      \renewcommand{\university}{Technische Universität München}%
+    }{%
+      \PackageError{tumthesis}{Unknown thesis language `#1'}{%
+        Use `en' or `de'.%
+      }%
+    }%
+  }%
+}
+\newcommand{\institutiontext}{%
+  \textsf{\researchgroup}\\
+  \textsf{\departmentprefix\ \department}\\
+  \ifdefempty{\school}{\textsf{\university}}{\textsf{\schoolprefix\ \school}}%
+}
+
+\newcommand{\thesisauthor}{John Doe}
+\newcommand{\supervisor}{}
+\newcommand{\advisor}{}
+\newcommand{\submissiondate}{}
+\newcommand{\subtitle}{}
+\newcommand{\thesisdegree}{Bachelor of Science (B.\,Sc.)}
+\newcommand{\thesisprogram}{Mathematics}
+
+\newcommand{\abstracttext}{%
+Sequentially ordered data naturally arise in a multitude of Data Science applications, thus undermining the need for scalable Machine Learning algorithms. This thesis aims to build a mathematically rigorous bridge between efficient kernel methods for sequentially ordered data and the signature transform, which is a non-commutative power series in the tensor algebra whose coefficients can be seen in close analogy to monomials. We begin with a self-contained review of the signature transform from a purely algebraic perspective and then connect these objects to kernel methods via the signature kernel, thereby generalizing polynomial kernels from static to sequentially ordered data. Additionally, we provide a more practically usable discretized version of the signature kernel.
+
+To overcome the quadratic cost in the number of sequences incurred by Gram matrix computations, we analyse two prominent dimensionality-reduction techniques that yield asymptotically linear training time in the number of sequences. We first combine Random Fourier Features with the discretized signature kernel, which are based on a Monte-Carlo approximation of a spectral measure that arises due to Bochner's Theorem. We provide one theoretical contribution by focusing on tensor random projections; using the Khatri-Rao product of very-sparse random projections we prove pointwise convergence with mixed tails and show fair speed-up compared to the iid Gaussian case presented in \cite{toth2025} for high-dimensional sequential data.%
+}
+
+\newcommand{\zusammenfassungtext}{%
+Sequentiell geordnete Daten treten in zahlreichen Anwendungen der Data Science auf und machen damit skalierbare Machine-Learning-Algorithmen erforderlich. Die nachfolgende Bachelorarbeit hat zum Ziel, eine mathematisch rigorose Brücke zwischen effizienten Kernel-Methoden für sequentiell geordnete Daten und der Signature Transform zu bilden. Letztere ist eine nichtkommutative Potenzreihe in der Tensoralgebra, deren Koeffizienten in enger Analogie zu Monomen stehen. Wir beginnen mit einem kurzen theoretischen Einblick in die Funktionsweise der Signature Transform aus rein algebraischer Sicht und verknüpfen diese Objekte anschließend über den Signature-Kernel mit Kernel-Methoden; damit werden polynomielle Kernel-Methoden von statischen auf sequenziell geordnete Daten verallgemeinert. Zusätzlich gehe wir auf eine in der Praxis nutzbare diskretisierte Variante ein.
+
+Um die quadratischen Laufzeit in der Anzahl der Datenpunkte, die bei Gram-Matrix Berechnungen anfallen, zu vermeiden, analysieren wir zwei prominente Dimensionsreduktionsverfahren, die asymptotisch lineare Trainingszeit in der Anzahl der Datenpunkte ermöglichen. Zunächst kombinieren wir Random Fourier Features mit dem diskretisierten Signature-Kernel; diese basieren auf einer Monte-Carlo-Approximation eines Spektralmaßes, das aus dem Satz von Bochner hervorgeht. Unser theoretischer Beitrag fokussiert sich hingegen auf tensorwertige Zufallsprojektionen: Unter Verwendung des Khatri-Rao Produkts von sehr dünnbesetzten Zufallsprojektionen beweisen wir punktweise Konvergenz mit gemischten Tails und zeigen einen deutlichen Laufzeitvorteil gegenüber den verwendeten unabhängig, normalverteilten Zufallsprojektion aus \cite{toth2025} für hochdimensionale sequentielle Daten.%
+}
+
+% ---------------------------------------------------------------------------
+% Math helpers
+% ---------------------------------------------------------------------------
+
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\argmax}{arg\,max}
+\DeclareMathOperator{\spanLA}{span}
+
+\newcommand{\tumthesistextgreek}[1]{{\normalfont\textrm{#1}}}
+\newcommand{\galpha}{\tumthesistextgreek{\textalpha}}
+\newcommand{\gbeta}{\tumthesistextgreek{\textbeta}}
+\newcommand{\ggamma}{\tumthesistextgreek{\textgamma}}
+\newcommand{\gdelta}{\tumthesistextgreek{\textdelta}}
+\newcommand{\gepsilon}{\tumthesistextgreek{\textepsilon}}
+\newcommand{\gphi}{\tumthesistextgreek{\textphi}}
+\newcommand{\gpsi}{\tumthesistextgreek{\textpsi}}
+\newcommand{\gsigma}{\tumthesistextgreek{\textsigma}}
+\newcommand{\gzeta}{\tumthesistextgreek{\textzeta}}
+\newcommand{\geta}{\tumthesistextgreek{\texteta}}
+\newcommand{\gtau}{\tumthesistextgreek{\texttau}}
+\newcommand{\gxi}{\tumthesistextgreek{\textxi}}
+\newcommand{\gtheta}{\tumthesistextgreek{\straighttheta}}
+\newcommand{\glambda}{\tumthesistextgreek{\textlambda}}
+\newcommand{\gGamma}{\tumthesistextgreek{\textGamma}}
+\newcommand{\gPi}{\tumthesistextgreek{\textPi}}
+\newcommand{\gpi}{\tumthesistextgreek{\textpi}}
+\newcommand{\gOmega}{\tumthesistextgreek{\textOmega}}
+\newcommand{\gomega}{\tumthesistextgreek{\textomega}}
+\newcommand{\gmu}{\tumthesistextgreek{\textmugreek}}
+\newcommand{\gLambda}{\tumthesistextgreek{\textLambda}}
+\newcommand{\gDelta}{\tumthesistextgreek{\textDelta}}
+\newcommand{\gnu}{\tumthesistextgreek{\textnu}}
+\newcommand{\gZeta}{\tumthesistextgreek{\textZeta}}
+\newcommand{\gkappa}{\tumthesistextgreek{\textkappa}}
+\newcommand{\giota}{\tumthesistextgreek{\textiota}}
+\newcommand{\gPhi}{\tumthesistextgreek{\textPhi}}
+\newcommand{\gPsi}{\tumthesistextgreek{\textPsi}}
+\newcommand{\gXi}{\tumthesistextgreek{\textXi}}
+\newcommand{\grho}{\tumthesistextgreek{\textrho}}
+\newcommand{\gUpsilon}{\tumthesistextgreek{\textUpsilon}}
+\newcommand{\gSigma}{\tumthesistextgreek{\textSigma}}
+
+% ---------------------------------------------------------------------------
+% Title and front matter
+% ---------------------------------------------------------------------------
+
+\newlength{\logoh}
+\setlength{\logoh}{3\baselineskip}
+
+\makeatletter
+\newcommand{\tumthesis@titlepage}{%
+  \begin{titlepage}
+    \noindent
+    \begin{minipage}[c]{0.65\textwidth}
+      \raggedright
+      \institutiontext
+    \end{minipage}%
+    \begin{minipage}[c]{0.35\textwidth}
+      \raggedleft
+      \includegraphics[height=\logoh]{\institutionlogo}
+    \end{minipage}
+
+    \vspace{2cm}
+
+    \begin{center}
+      {\Huge\bfseries \thetitle \par}
+      {\large\bfseries \subtitle \par}
+    \end{center}
+
+    \vspace{3.0cm}
+
+    \raggedright
+    {\huge\textbf{\thesisauthor}\par}
+    \vspace{3.0cm}
+    {\large Thesis for the attainment of the academic degree\\%
+      \textbf{\thesisdegree} in \thesisprogram\par}
+    \vspace{3.0cm}
+    {\large
+      \textbf{Supervisor:}\\ \supervisor \par
+      \textbf{Advisor:}\\ \advisor \par
+      \textbf{Submitted:}\\ \submissiondate \par
+    }
+
+    \vfill
+    \begin{center}
+      \includegraphics[height=2cm,keepaspectratio]{\bottomlogo}
+    \end{center}
+  \end{titlepage}
+}
+
+\newcommand{\tumthesis@declaration}{%
+  \clearpage
+  \thispagestyle{empty}
+  \vspace*{\fill}
+  \noindent
+  I hereby declare that this thesis is entirely the result of my own work except
+  where otherwise indicated. I have only used the resources given in the list of
+  references.
+
+  \vspace{0.5cm}
+
+  \noindent
+  \submissiondate\hfill
+  \raisebox{-0.18\height}{\includegraphics[height=2.5cm]{\authorsignature}}
+  \clearpage
+}
+
+\newcommand{\tumthesis@abstracts}{%
+  \thispagestyle{plain}
+  \section*{Abstract}
+  \abstracttext
+
+  \section*{Zusammenfassung}
+  \zusammenfassungtext
+  \clearpage
+}
+
+\newcommand{\tumthesis@contents}{%
+  \tableofcontents
+  \clearpage
+}
+
+\renewcommand{\maketitle}{%
+  \tumthesis@titlepage
+  \tumthesis@declaration
+  \tumthesis@abstracts
+  \tumthesis@contents
+}
+\makeatother
+
+% ---------------------------------------------------------------------------
+% Chapter headings and page style
+% ---------------------------------------------------------------------------
+
+\titleformat{\chapter}[display]
+  {\centering\Huge\bfseries}
+  {Chapter \thechapter}
+  {1ex}
+  {\Huge}
+
+\titlespacing*{\chapter}
+  {0pt}
+  {0pt}
+  {2\baselineskip}
+
+\titleformat{name=\chapter,numberless}[block]
+  {\huge\bfseries\raggedright}
+  {}
+  {0pt}
+  {}
+
+\renewcommand{\cfttoctitlefont}{\Huge\bfseries\raggedright}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.01pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[LE]{\nouppercase{\rightmark}}
+\fancyhead[RO]{\nouppercase{\leftmark}}
+\fancyfoot[C]{\thepage}
+
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \renewcommand{\headrulewidth}{0pt}
+  \fancyfoot[C]{\thepage}%
+}
+
+% ---------------------------------------------------------------------------
+% Theorem environments
+% ---------------------------------------------------------------------------
+
+\newtheoremstyle{tumplain}
+  {3pt}
+  {3pt}
+  {\itshape}
+  {1em}
+  {\bfseries}
+  {}
+  {0.8em}
+  {}
+\theoremstyle{tumplain}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\newtheoremstyle{tumdef}
+  {3pt}
+  {3pt}
+  {\normalfont}
+  {1em}
+  {\bfseries}
+  {}
+  {0.8em}
+  {}
+\theoremstyle{tumdef}
+\newtheorem{definition}[theorem]{Definition}
+
+\newtheoremstyle{tumnote}
+  {3pt}
+  {3pt}
+  {\normalfont}
+  {1em}
+  {\bfseries}
+  {.}
+  {0.8em}
+  {}
+\theoremstyle{tumnote}
+\newtheorem*{note}{Note}
+
+% ---------------------------------------------------------------------------
+% Bibliography and URL handling
+% ---------------------------------------------------------------------------
+
+\renewcommand{\bibname}{Bibliography}
+\defbibheading{bibintoc}[\bibname]{%
+  \chapter*{#1\markboth{#1}{#1}}%
+}
+
+\Urlmuskip=0mu plus 2mu\relax
+\appto{\biburlsetup}{\Urlmuskip=0mu plus 2mu\relax}
+\setcounter{biburlnumpenalty}{100}
+\setcounter{biburlucpenalty}{100}
+\setcounter{biburllcpenalty}{100}
+\appto{\bibsetup}{\emergencystretch=1em}
+
+\endinput
