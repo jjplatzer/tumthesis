@@ -2,6 +2,10 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{tumthesis}[2026/08/05 TUM Thesis Template]
 
+\newif\ifusetextgreek
+\DeclareOption{usetextgreek}{\usetextgreektrue}
+\ProcessOptions\relax
+
 % ---------------------------------------------------------------------------
 % Dependencies
 % ---------------------------------------------------------------------------
@@ -14,6 +18,7 @@
 \RequirePackage{graphicx}
 \RequirePackage{svg}
 \RequirePackage{enumitem}
+\RequirePackage{lipsum}
 
 % Mathematics
 \RequirePackage{amsmath}
@@ -28,6 +33,7 @@
 \RequirePackage{textgreek}
 
 % Document structure
+\RequirePackage{expl3}
 \RequirePackage{amsthm}
 \RequirePackage{titlesec}
 \RequirePackage{fancyhdr}
@@ -94,24 +100,15 @@
 }
 
 \newcommand{\thesisauthor}{John Doe}
-\newcommand{\supervisor}{}
-\newcommand{\advisor}{}
-\newcommand{\submissiondate}{}
+\newcommand{\supervisor}{Supervisor Doe}
+\newcommand{\advisor}{Advisor Doe}
+\newcommand{\submissiondate}{01.01.1970}
 \newcommand{\subtitle}{}
 \newcommand{\thesisdegree}{Bachelor of Science (B.\,Sc.)}
 \newcommand{\thesisprogram}{Mathematics}
 
-\newcommand{\abstracttext}{%
-Sequentially ordered data naturally arise in a multitude of Data Science applications, thus undermining the need for scalable Machine Learning algorithms. This thesis aims to build a mathematically rigorous bridge between efficient kernel methods for sequentially ordered data and the signature transform, which is a non-commutative power series in the tensor algebra whose coefficients can be seen in close analogy to monomials. We begin with a self-contained review of the signature transform from a purely algebraic perspective and then connect these objects to kernel methods via the signature kernel, thereby generalizing polynomial kernels from static to sequentially ordered data. Additionally, we provide a more practically usable discretized version of the signature kernel.
-
-To overcome the quadratic cost in the number of sequences incurred by Gram matrix computations, we analyse two prominent dimensionality-reduction techniques that yield asymptotically linear training time in the number of sequences. We first combine Random Fourier Features with the discretized signature kernel, which are based on a Monte-Carlo approximation of a spectral measure that arises due to Bochner's Theorem. We provide one theoretical contribution by focusing on tensor random projections; using the Khatri-Rao product of very-sparse random projections we prove pointwise convergence with mixed tails and show fair speed-up compared to the iid Gaussian case presented in \cite{toth2025} for high-dimensional sequential data.%
-}
-
-\newcommand{\zusammenfassungtext}{%
-Sequentiell geordnete Daten treten in zahlreichen Anwendungen der Data Science auf und machen damit skalierbare Machine-Learning-Algorithmen erforderlich. Die nachfolgende Bachelorarbeit hat zum Ziel, eine mathematisch rigorose Brücke zwischen effizienten Kernel-Methoden für sequentiell geordnete Daten und der Signature Transform zu bilden. Letztere ist eine nichtkommutative Potenzreihe in der Tensoralgebra, deren Koeffizienten in enger Analogie zu Monomen stehen. Wir beginnen mit einem kurzen theoretischen Einblick in die Funktionsweise der Signature Transform aus rein algebraischer Sicht und verknüpfen diese Objekte anschließend über den Signature-Kernel mit Kernel-Methoden; damit werden polynomielle Kernel-Methoden von statischen auf sequenziell geordnete Daten verallgemeinert. Zusätzlich gehe wir auf eine in der Praxis nutzbare diskretisierte Variante ein.
-
-Um die quadratischen Laufzeit in der Anzahl der Datenpunkte, die bei Gram-Matrix Berechnungen anfallen, zu vermeiden, analysieren wir zwei prominente Dimensionsreduktionsverfahren, die asymptotisch lineare Trainingszeit in der Anzahl der Datenpunkte ermöglichen. Zunächst kombinieren wir Random Fourier Features mit dem diskretisierten Signature-Kernel; diese basieren auf einer Monte-Carlo-Approximation eines Spektralmaßes, das aus dem Satz von Bochner hervorgeht. Unser theoretischer Beitrag fokussiert sich hingegen auf tensorwertige Zufallsprojektionen: Unter Verwendung des Khatri-Rao Produkts von sehr dünnbesetzten Zufallsprojektionen beweisen wir punktweise Konvergenz mit gemischten Tails und zeigen einen deutlichen Laufzeitvorteil gegenüber den verwendeten unabhängig, normalverteilten Zufallsprojektion aus \cite{toth2025} für hochdimensionale sequentielle Daten.%
-}
+\newcommand{\abstracten}{\lipsum[1]}
+\newcommand{\abstractde}{\lipsum[2]}
 
 % ---------------------------------------------------------------------------
 % Math helpers
@@ -123,39 +120,56 @@ Um die quadratischen Laufzeit in der Anzahl der Datenpunkte, die bei Gram-Matrix
 \DeclareMathOperator{\argmax}{arg\,max}
 \DeclareMathOperator{\spanLA}{span}
 
-\newcommand{\tumthesistextgreek}[1]{{\normalfont\textrm{#1}}}
-\newcommand{\galpha}{\tumthesistextgreek{\textalpha}}
-\newcommand{\gbeta}{\tumthesistextgreek{\textbeta}}
-\newcommand{\ggamma}{\tumthesistextgreek{\textgamma}}
-\newcommand{\gdelta}{\tumthesistextgreek{\textdelta}}
-\newcommand{\gepsilon}{\tumthesistextgreek{\textepsilon}}
-\newcommand{\gphi}{\tumthesistextgreek{\textphi}}
-\newcommand{\gpsi}{\tumthesistextgreek{\textpsi}}
-\newcommand{\gsigma}{\tumthesistextgreek{\textsigma}}
-\newcommand{\gzeta}{\tumthesistextgreek{\textzeta}}
-\newcommand{\geta}{\tumthesistextgreek{\texteta}}
-\newcommand{\gtau}{\tumthesistextgreek{\texttau}}
-\newcommand{\gxi}{\tumthesistextgreek{\textxi}}
-\newcommand{\gtheta}{\tumthesistextgreek{\straighttheta}}
-\newcommand{\glambda}{\tumthesistextgreek{\textlambda}}
-\newcommand{\gGamma}{\tumthesistextgreek{\textGamma}}
-\newcommand{\gPi}{\tumthesistextgreek{\textPi}}
-\newcommand{\gpi}{\tumthesistextgreek{\textpi}}
-\newcommand{\gOmega}{\tumthesistextgreek{\textOmega}}
-\newcommand{\gomega}{\tumthesistextgreek{\textomega}}
-\newcommand{\gmu}{\tumthesistextgreek{\textmugreek}}
-\newcommand{\gLambda}{\tumthesistextgreek{\textLambda}}
-\newcommand{\gDelta}{\tumthesistextgreek{\textDelta}}
-\newcommand{\gnu}{\tumthesistextgreek{\textnu}}
-\newcommand{\gZeta}{\tumthesistextgreek{\textZeta}}
-\newcommand{\gkappa}{\tumthesistextgreek{\textkappa}}
-\newcommand{\giota}{\tumthesistextgreek{\textiota}}
-\newcommand{\gPhi}{\tumthesistextgreek{\textPhi}}
-\newcommand{\gPsi}{\tumthesistextgreek{\textPsi}}
-\newcommand{\gXi}{\tumthesistextgreek{\textXi}}
-\newcommand{\grho}{\tumthesistextgreek{\textrho}}
-\newcommand{\gUpsilon}{\tumthesistextgreek{\textUpsilon}}
-\newcommand{\gSigma}{\tumthesistextgreek{\textSigma}}
+\newcommand{\greekrm}[1]{%
+  \ifmmode
+    \text{\normalfont\textrm{#1}}%
+  \else
+    {\normalfont\textrm{#1}}%
+  \fi
+}
+
+\ExplSyntaxOn
+\clist_new:N \g_tumthesis_textgreek_regular_clist
+\clist_gset:Nn \g_tumthesis_textgreek_regular_clist
+  {
+    alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota, kappa,
+    lambda, nu, xi, pi, sigma, tau, upsilon, phi, chi, psi, omega,
+    Gamma, Delta, Theta, Lambda, Xi, Pi, Sigma, Upsilon, Phi, Psi, Omega
+  }
+
+\prop_new:N \g_tumthesis_textgreek_irregular_prop
+\prop_gset_from_keyval:Nn \g_tumthesis_textgreek_irregular_prop
+  {
+    mu         = textmugreek,
+    rho        = textrho,
+    varepsilon = straightepsilon,
+    vartheta   = scripttheta,
+    varsigma   = textvarsigma,
+    varphi     = straightphi
+  }
+
+\cs_new_protected:Npn \tumthesis_textgreek_renew:nn #1#2
+  {
+    \cs_set_protected:cpn {#1} { \greekrm { \use:c {#2} } }
+  }
+
+\cs_new_protected:Npn \tumthesis_textgreek_renew_regular:n #1
+  {
+    \tumthesis_textgreek_renew:nn {#1} { text#1 }
+  }
+
+\cs_new_protected:Npn \tumthesis_textgreek_apply:
+  {
+    \clist_map_inline:Nn \g_tumthesis_textgreek_regular_clist
+      { \tumthesis_textgreek_renew_regular:n {##1} }
+    \prop_map_inline:Nn \g_tumthesis_textgreek_irregular_prop
+      { \tumthesis_textgreek_renew:nn {##1} {##2} }
+  }
+
+\cs_new_eq:NN \tumthesisusetextgreek \tumthesis_textgreek_apply:
+\ExplSyntaxOff
+
+\AtBeginDocument{\ifusetextgreek\tumthesisusetextgreek\fi}
 
 % ---------------------------------------------------------------------------
 % Title and front matter
@@ -222,13 +236,17 @@ Um die quadratischen Laufzeit in der Anzahl der Datenpunkte, die bei Gram-Matrix
   \clearpage
 }
 
-\newcommand{\tumthesis@abstracts}{%
-  \thispagestyle{plain}
+\newcommand{\makeabstract}{%
   \section*{Abstract}
-  \abstracttext
+  \abstracten
 
   \section*{Zusammenfassung}
-  \zusammenfassungtext
+  \abstractde
+}
+
+\newcommand{\tumthesis@abstracts}{%
+  \thispagestyle{plain}
+  \makeabstract
   \clearpage
 }
 
